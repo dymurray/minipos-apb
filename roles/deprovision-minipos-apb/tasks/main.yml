@@ -14,9 +14,6 @@
     namespace: '{{ namespace }}'
     state: absent
 
-- name: delete configmap
-  shell: oc delete configmap minipos-config -n '{{ namespace }}'
-
 ##############################################################################
 ## Deprovision a service
 ##############################################################################

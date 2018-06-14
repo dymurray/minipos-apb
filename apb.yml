@@ -16,3 +16,6 @@ plans:
         title: xPub Key
         type: string
         required: true
+      - name: email_address
+        title: Email address to send invoice list
+        type: string

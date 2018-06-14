@@ -13,14 +13,6 @@
 ## one deployment of an image to a new one.
 ## https://docs.openshift.org/latest/architecture/core_concepts/deployments.html#deployments-and-deployment-configurations
 ##############################################################################
-- name: create minipos config
-  template:
-    src: minipos.cfg.j2
-    dest: /tmp/minipos.cfg
-
-- name: create configmap
-  shell: oc create configmap minipos-config --from-file=minipos-config=/tmp/minipos.cfg -n '{{ namespace }}'
-
 - name: create deployment config
   openshift_v1_deployment_config:
     name: minipos
@@ -37,21 +29,15 @@
       service: minipos
     containers:
     - env:
+      - name: XPUB
+        value: "{{ xpub }}"
+      - name: EMAIL
+        value: "{{ email_address }}"
       image: docker.io/dymurray/minipos
       name: minipos
-      volumeMounts:
-        - mountPath: /home/minipos/data/
-          name: config
       ports:
       - container_port: 8080
         protocol: TCP
-    volumes:
-      - name: config
-        configMap:
-          name: minipos-config
-          items:
-            - key: minipos-config
-              path: minipos.cfg
 
 
 ##############################################################################
